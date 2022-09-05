@@ -103,8 +103,26 @@ def show_options():
     table.add_row("4", "Quit the program")
     table.add_row("5", "Show all saved accounts")
     table.add_row("6", "Delete everything")
+    table.add_row("7", "Type in to see reused passwords")
 
     console.print(table, justify="center")
+
+
+def handle_reused_passwords(list_account):
+    password = list(set([account['password'] for account in list_account]))
+    list_return = []
+
+    for pswd in password:
+        cmpt = 0
+        list_intermeditate = []
+        for element in list_account:
+            if element['password'] == pswd and element['website_name'] not in list_intermeditate:
+                cmpt += 1
+                list_intermeditate.append(element['website_name'])
+        if cmpt >= 2:
+            list_return.append(list_intermeditate)
+
+    print(list_return)
 
 
 def print_accounts(list_accounts, option=None):
@@ -165,6 +183,8 @@ def main():
             print_accounts(account_list)
         elif option == "6":
             delete_all_accounts(master_password)
+        elif option == "7":
+            handle_reused_passwords(account_list)
         else:
             print("Invalid command...")
             print("Restarting...")
